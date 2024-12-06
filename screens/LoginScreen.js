@@ -1,189 +1,150 @@
-import React, { useState, useEffect } from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, BackHandler, Alert, ActivityIndicator } from 'react-native';
-// import { CheckBox } from '@rneui/themed';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import axios from 'axios';
-// import AsyncStorage from "@react-native-async-storage/async-storage"
+import React from 'react';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import LoginLogo from "../assets/LoginLogo.svg";
+import Google from "../assets/Google.svg";
 
 const LoginScreen = () => {
   const navigation = useNavigation();
-  const isFocused = useIsFocused();
-  const [check, setCheck] = useState(false);
-  const [userName, SetUserName] = useState('');
-  const [password, setPassword] = useState('');
-  const [isEmailFocused, setEmailFocused] = useState(false);
-  const [isPasswordFocused, setPasswordFocused] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-//   const handleCheckBoxPress = () => {
-//     setCheck(!check);
-//   };
-
-//   const handleLogin = async () => {
-
-//     try {
-//       // Check if any field is empty
-//       if (!userName || !password) {
-//         Alert.alert('Error!', 'Please enter both USername and password');
-//         return;
-//       }
-//       setIsLoading(true);
-//       // Your API endpoint
-//       const apiUrl = 'http://192.168.18.188/api/Account/Login';
-
-//       // Your request payload
-//       const data = {
-//         username: userName,
-//         password: password,
-//         rememberMe: check,
-//       };
-
-//       // Make a POST request using Axios
-//       const response = await axios.post(apiUrl, data);
-
-//       // Check the response for authentication status (customize as needed)
-//       if (response.status === 200) {
-//         // Assuming the API returns a success indicator
-
-//         // Save user information to AsyncStorage
-
-//         // Set a default value if userName is undefined
-
-//         await AsyncStorage.setItem('USERLOGIN', 'true');
-//         await AsyncStorage.setItem('USER', userName);
-//         await AsyncStorage.setItem('USER_LOGGED_IN', 'true');
-
-//            navigation.navigate("home")
-//         // Alert.alert('Success!', 'Login successful');
-//       } else if (response.status === 202) {
-//         Alert.alert('Error!', 'Invalid Code!');
-//       } else if (response.status === 203) {
-//         Alert.alert('Error!', 'Request Not Approved. Contact Administrator');
-//       } else {
-//         // Handle other status codes
-//         Alert.alert('Error!', 'Invalid Code!');
-//       }
-//     } catch (error) {
-//       // console.error('Login error:', error);
-
-//       Alert.alert('Error!', error.response?.data?.toString() || error.toString());
-//     }
-//   };
-//   const handleBackButton = () => {
-//     if (isFocused) {
-//       // Only handle back button on the home screen
-//       Alert.alert(
-//         'Exit App',
-//         'Are you sure you want to exit?',
-//         [
-//           {
-//             text: 'Cancel',
-//             style: 'cancel',
-//           },
-//           {
-//             text: 'Exit',
-//             onPress: () => {
-//               // You can add any additional cleanup logic before exiting
-//               BackHandler.exitApp(); // This will exit the app
-//             },
-//           },
-//         ],
-//       );
-
-//       return true; // Prevent default behavior
-//     }
-
-//     // If not on the home screen, allow the default behavior
-//     return false;
-//   };
-
-//   useEffect(() => {
-//     // Add event listener for hardware back button press
-//     const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
-
-//     // Clean up the event listener on component unmount
-//     return () => {
-//       backHandler.remove();
-//     };
-//   }, [isFocused]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#FFF" }}>
-      <View style={{ width: 350, height: "100%", alignSelf: "center", marginTop: 30 }}>
-        <View style={{ width: "100%", height: 250, }}>
-          <Image style={{ width: 100, height: 120, alignSelf: "center", marginTop: 50 }} source={require('../assets/googlesheet.jpeg')} />
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0} // adjust this value as needed
+    >
+     
+        <View style={styles.innerView}>
+          {/* <LoginLogo /> */}
+           {/* <LoginLogo/> */}
+      <Image
+        source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkKimsLvTitGNjXhbytt4yhhqnejgi_x4l9g&s' }}
+        style={{width:100,height:80,borderRadius:20}}
+        resizeMode="cover"
+      />
+          <Text style={styles.logoText}>LOGIN</Text>
         </View>
-
-        <View style={{ width: "100%", height: 100}}>
-          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-            <View style={{ marginTop: 20 }}>
-              <Text style={{ fontSize: 24, fontWeight: "900", color: "#006600", }}>Login to</Text>
-              <Text style={{ fontSize: 27, fontWeight: "900", color: "#006600", marginTop: 3 }}>GoogleSheet</Text>
-            </View>
-            {/* <Image style={{ width: 100, height: 100, alignSelf: "center", marginTop: 25 }} source={require('../assets/clock.png')} /> */}
-          </View>
+        <View style={styles.formView}>
+          <Text style={styles.innerText}>Login To Your Account</Text>
+          <TextInput
+            placeholder="Username"
+            placeholderTextColor="#A1A1A1"
+            style={styles.textInput}
+          />
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor="#A1A1A1"
+            style={styles.textInput}
+            secureTextEntry
+          />
+          <TouchableOpacity  onPress={()=>navigation.navigate("status")}   style={styles.buttonView}>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.forgotButton}>
+            <Text style={styles.forgotText}>Forgot Password?</Text>
+          </TouchableOpacity>
+          {/* <TouchableOpacity style={styles.googleButton}>
+            <Google />
+            <Text style={styles.googleButtonText}>Login With Google</Text>
+          </TouchableOpacity> */}
         </View>
+    
+    </KeyboardAvoidingView>
+  );
+};
 
-        <View style={{ width: "100%", height: 200, }}>
-          <Text style={{ marginTop: 10, color: "#CAC9C9", marginBottom: 2 }}>Username</Text>
-          <View style={{ height: 65, width: "100%", borderWidth: 1, borderColor: isEmailFocused ? "#006600" : "#D6D6D6", borderRadius: 10 }}>
-            <TextInput style={{ height: 65, width: "100%", borderRadius: 10, paddingHorizontal: 20, color: "#006600" }}
-              placeholder='Enter Your Username'
-              placeholderTextColor={isEmailFocused ? "#006600" : "#D6D6D6"}
-              value={userName}
-              onChangeText={(value) => SetUserName(value)}
-              onFocus={() => setEmailFocused(true)}
-              onBlur={() => setEmailFocused(false)}
-            />
-          </View>
-
-          <Text style={{ marginTop: 10, color: "#CAC9C9", marginBottom: 2 }}>Password</Text>
-          <View style={{ height: 65, width: "100%", borderWidth: 1, borderColor: isPasswordFocused ? "#006600" : "#D6D6D6", borderRadius: 10 }}>
-            <TextInput style={{ height: 65, width: "100%", borderRadius: 10, paddingHorizontal: 20, color: "#006600" }}
-              placeholder='Enter Your Password'
-              placeholderTextColor={isPasswordFocused ? "#006600" : "#D6D6D6"}
-              onChangeText={setPassword}
-              secureTextEntry
-              onFocus={() => setPasswordFocused(true)}
-              onBlur={() => setPasswordFocused(false)}
-              value={password}
-            />
-          </View>
-        </View>
-        <View style={{ width: "100%", height: 100 }}>
-
-          {/* <CheckBox
-            title="Remember me"
-            checked={check}
-            onPress={handleCheckBoxPress}
-            checkedColor="#B81716"
-            textStyle={{ color: '#B81716', fontWeight: "bold" }}
-            containerStyle={{ marginRight: 50 }}
-          /> */}
-
-        </View>
-        <TouchableOpacity onPress={()=> navigation.navigate("googleSheet")}   style={{ height: 65, width: "100%", backgroundColor: "#006600", borderWidth: 1, borderColor: "#D6D6D6", borderRadius: 10, alignItems: "center", justifyContent: "center" }}>
-          <Text style={{ color: "white", fontSize: 15, fontWeight: "bold" }}>LOGIN</Text>
-        </TouchableOpacity>
-
-
-      </View>
-      {isLoading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#EC1110" />
-        </View>
-      )}
-    </View>
-  )
-}
-
-export default LoginScreen
+export default LoginScreen;
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Semi-transparent white background
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
   },
-})
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+  },
+  innerView: {
+    width: "100%",
+    height: "40%",
+    backgroundColor: "#2ecc71",
+    justifyContent: "center",
+    alignItems: "center",
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+  },
+  logoText: {
+    fontSize: 25,
+    fontWeight: "900",
+    color: "#fff",
+    marginTop: 8,
+  },
+  formView: {
+    width: "90%",
+    height:"55%",
+    alignSelf: "center",
+    marginTop: "6%",
+   
+  },
+  innerText: {
+    fontSize: 15,
+    fontWeight: "900",
+    color: "black",
+    marginBottom: 20,
+    left:"5%"
+  },
+  textInput: {
+    width: "95%",
+    height: 60,
+    borderWidth: 1,
+    borderColor: "#C8C8C8",
+    borderRadius: 10,
+    paddingLeft: 30,
+    marginBottom: 20,
+    alignSelf:"center"
+  },
+  buttonView: {
+    width: "55%",
+    height: 60,
+    backgroundColor: "#2ecc71",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    top:"4%",
+    alignSelf:"center"
+   
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: "900",
+    color: "#fff",
+  },
+  forgotButton: {
+    alignItems: "flex-end",
+    top:"10%",
+    right:"4%"
+  },
+  forgotText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#262424",
+  },
+  googleButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "95%",
+    height: 60,
+    borderColor: "#C8C8C8",
+    borderWidth: 1,
+    borderRadius: 10,
+    top:"30%",
+    alignSelf:"center"
+  },
+  googleButtonText: {
+    fontSize: 14,
+    fontWeight: "900",
+    color: "#000",
+    marginLeft: 20,
+  },
+});
